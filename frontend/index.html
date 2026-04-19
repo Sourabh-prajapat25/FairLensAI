@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FairLens AI — Detect & Fix Bias in AI Systems</title>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===================== GLOBAL NAV BAR ===================== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" style="text-decoration: none;">
+    <div class="nav-brand">
+      <span class="nav-logo">🔍</span>
+      <span class="nav-title">FairLens <span class="accent">AI</span></span>
+    </div></a>
+    <div class="nav-steps" id="navSteps">
+      <div class="nav-step" data-step="upload">
+        <span class="step-dot">1</span><span class="step-label">Upload</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="nav-step" data-step="results">
+        <span class="step-dot">2</span><span class="step-label">Analyze</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="nav-step" data-step="comparison">
+        <span class="step-dot">3</span><span class="step-label">Fix & Compare</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="nav-step" data-step="report">
+        <span class="step-dot">4</span><span class="step-label">Report</span>
+      </div>
+    </div>
+    <button class="btn-nav-cta" onclick="navigateTo('upload')">Try Free</button>
+  </nav>
+
+  <!-- ===================== LOADING OVERLAY ===================== -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <p class="loading-title" id="loadingTitle">Analyzing Dataset…</p>
+      <p class="loading-sub" id="loadingSub">Running fairness algorithms on your data</p>
+      <div class="loading-steps">
+        <div class="load-step active" id="ls1">✓ Parsing CSV</div>
+        <div class="load-step" id="ls2">⚙ Running Fairness Metrics</div>
+        <div class="load-step" id="ls3">🧠 Generating AI Explanation</div>
+        <div class="load-step" id="ls4">📊 Preparing Results</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION: LANDING ===================== -->
+  <section id="section-landing" class="section active">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-badge">✨ AI-Powered Bias Detection</div>
+      <h1 class="hero-title">
+        Detect and Fix Bias<br />
+        in <span class="gradient-text">AI Systems</span>
+      </h1>
+      <p class="hero-sub">
+        Upload your dataset, get a fairness score, understand the bias in plain English,
+        apply automated fixes, and download a full compliance report — in minutes.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="navigateTo('upload')">
+          Get Started — It's Free
+        </button>
+        <button class="btn btn-ghost btn-lg" onclick="scrollToFeatures()">
+          Learn More ↓
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>98%</strong><span>Detection Accuracy</span></div>
+        <div class="stat-div"></div>
+        <div class="hero-stat"><strong>6</strong><span>Fairness Metrics</span></div>
+        <div class="stat-div"></div>
+        <div class="hero-stat"><strong>AI</strong><span>Plain-English Explanations</span></div>
+      </div>
+    </div>
+
+
+    <!-- Flow Steps -->
+    <div class="flow-section" id="features">
+      <p class="section-label">HOW IT WORKS</p>
+      <h2 class="section-title">From Raw Data to Fair AI in 4 Steps</h2>
+      <div class="flow-steps">
+        <div class="flow-card">
+          <div class="flow-icon" style="background:#eff6ff;">📤</div>
+          <div class="flow-step-num">01</div>
+          <h3>Upload</h3>
+          <p>Drag & drop your CSV dataset. Supports demographic and outcome columns.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-card">
+          <div class="flow-icon" style="background:#f0fdf4;">🔬</div>
+          <div class="flow-step-num">02</div>
+          <h3>Analyze</h3>
+          <p>Our engine computes bias score, disparate impact, and fairness metrics instantly.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-card">
+          <div class="flow-icon" style="background:#fefce8;">🛠</div>
+          <div class="flow-step-num">03</div>
+          <h3>Fix</h3>
+          <p>Apply AI-suggested debiasing techniques with one click. See before & after.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-card">
+          <div class="flow-icon" style="background:#fdf4ff;">📄</div>
+          <div class="flow-step-num">04</div>
+          <h3>Report</h3>
+          <p>Download a full PDF compliance report with metrics, explanations, and fixes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Cards -->
+    <div class="features-section">
+      <p class="section-label">FEATURES</p>
+      <h2 class="section-title">Everything You Need for Responsible AI</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h4>Bias Score Dashboard</h4>
+          <p>Instant 0–100 bias score with visual indicators and trend tracking.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <h4>Fairness Metrics</h4>
+          <p>Demographic parity, equal opportunity, disparate impact, and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h4>AI Explanations</h4>
+          <p>Human-readable summaries of what bias was found and why it matters.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h4>Auto-Fix Engine</h4>
+          <p>Reweighting, resampling, and threshold adjustment techniques applied automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h4>Before vs After Charts</h4>
+          <p>Visual comparison showing exactly how much improvement was achieved.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📑</div>
+          <h4>PDF Compliance Report</h4>
+          <p>Audit-ready reports for GDPR, EU AI Act, and internal governance.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+      
+      <div class="footer-brand">
+        <span>🔍</span>
+        <span>FairLens <strong>AI</strong></span>
+      </div>
+      <p>© 2025 FairLens AI. Built for responsible and ethical AI development.</p>
+    </footer>
+  </section>
+
+  <!-- ===================== SECTION: UPLOAD ===================== -->
+  <section id="section-upload" class="section">
+    <div class="page-container">
+      <div class="report-header">
+  <button class="back-btn">← Back</button>
+      </div>
+
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Upload Your Dataset</h2>
+          <p class="page-sub">Supported format: CSV files with demographic and outcome columns</p>
+        </div>
+      </div>
+
+      <!-- Upload Card -->
+      <div class="upload-card" id="uploadCard">
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-icon">📁</div>
+          <h3>Drag & Drop your CSV file here</h3>
+          <p>or click to browse your files</p>
+          <input type="file" id="fileInput" accept=".csv" hidden />
+          <button class="btn btn-outline">
+            Browse File
+          </button>
+        </div>
+
+        <!-- File selected state -->
+        <div class="file-selected" id="fileSelected" style="display:none;">
+          <div class="file-info">
+            <span class="file-icon">📄</span>
+            <div class="file-details">
+              <span class="file-name" id="selectedFileName">dataset.csv</span>
+              <span class="file-size" id="selectedFileSize">2.4 KB</span>
+            </div>
+            <button class="btn-remove" onclick="removeFile()" title="Remove file">✕</button>
+          </div>
+
+          <!-- Dataset Preview -->
+          <div class="dataset-preview" id="datasetPreview">
+            <p class="preview-label">📋 Dataset Preview (first 5 rows)</p>
+            <div class="preview-table-wrapper">
+              <table class="preview-table" id="previewTable"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample CSV hint -->
+      <div class="sample-hint">
+        <span>💡 Don't have a dataset?</span>
+        <button class="btn-link" onclick="loadSampleData()">Load sample dataset</button>
+      </div>
+
+      <!-- Analyze Button -->
+      <div class="upload-actions">
+        <button class="btn btn-primary btn-lg" id="analyzeBtn" onclick="analyzeDataset()" disabled>
+          <span id="analyzeBtnText">Analyze Dataset</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <p class="upload-note">Analysis typically takes 5–10 seconds</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION: RESULTS ===================== -->
+  <section id="section-results" class="section">
+    <div class="page-container">
+
+       <div class="report-header">
+        <button class="back-btn" onclick="navigateTo('upload')">← Re-upload</button>
+
+      </div>
+
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Bias Analysis Results</h2>
+          <p class="page-sub" id="resultsFileName">Analysis for: dataset.csv</p>
+        </div>
+        <div class="header-badge" id="biasBadge">
+          <span class="badge badge-danger" id="biasStatusBadge">⚠ Bias Detected</span>
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="results-grid">
+
+        <!-- Bias Score Card -->
+        <div class="result-card score-card">
+          <div class="card-header">
+            <span class="card-icon">🎯</span>
+            <h3>Bias Score</h3>
+            <span class="card-tooltip" title="Higher score = more bias detected">ⓘ</span>
+          </div>
+          <div class="score-display">
+            <div class="score-ring-wrapper">
+              <svg class="score-ring" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                <circle class="ring-fill" id="scoreRingFill" cx="60" cy="60" r="50"
+                  stroke-dasharray="314" stroke-dashoffset="314"/>
+              </svg>
+              <div class="score-inner">
+                <span class="score-number" id="biasScore">72</span>
+                <span class="score-label">/ 100</span>
+              </div>
+            </div>
+          </div>
+          <div class="score-bar-wrapper">
+            <div class="score-bar-track">
+              <div class="score-bar-fill" id="scoreBarFill" style="width:0%"></div>
+            </div>
+            <div class="score-bar-labels">
+              <span style="color:#10b981">Low Risk</span>
+              <span style="color:#f59e0b">Moderate</span>
+              <span style="color:#ef4444">High Risk</span>
+            </div>
+          </div>
+          <p class="score-desc" id="scoreDesc">High bias detected. Immediate action recommended.</p>
+        </div>
+
+        <!-- Metrics Card -->
+        <div class="result-card metrics-card">
+          <div class="card-header">
+            <span class="card-icon">📏</span>
+            <h3>Fairness Metrics</h3>
+          </div>
+          <div class="metrics-list">
+            <div class="metric-item">
+              <div class="metric-info">
+                <span class="metric-name">Demographic Parity</span>
+                <span class="metric-hint">Ideal: &lt; 0.10</span>
+              </div>
+              <div class="metric-bar-wrap">
+                <div class="metric-bar-track">
+                  <div class="metric-bar-fill" id="dp-bar" style="width:0%"></div>
+                </div>
+                <span class="metric-value" id="dp-value">0.28</span>
+              </div>
+              <span class="metric-status" id="dp-status">⚠ Poor</span>
+            </div>
+
+            <div class="metric-item">
+              <div class="metric-info">
+                <span class="metric-name">Equal Opportunity Diff.</span>
+                <span class="metric-hint">Ideal: &lt; 0.10</span>
+              </div>
+              <div class="metric-bar-wrap">
+                <div class="metric-bar-track">
+                  <div class="metric-bar-fill" id="eo-bar" style="width:0%"></div>
+                </div>
+                <span class="metric-value" id="eo-value">0.31</span>
+              </div>
+              <span class="metric-status" id="eo-status">⚠ Poor</span>
+            </div>
+
+            <div class="metric-item">
+              <div class="metric-info">
+                <span class="metric-name">Disparate Impact</span>
+                <span class="metric-hint">Ideal: &gt; 0.80</span>
+              </div>
+              <div class="metric-bar-wrap">
+                <div class="metric-bar-track">
+                  <div class="metric-bar-fill metric-bar-inverse" id="di-bar" style="width:0%"></div>
+                </div>
+                <span class="metric-value" id="di-value">0.67</span>
+              </div>
+              <span class="metric-status" id="di-status">⚠ Poor</span>
+            </div>
+
+            <div class="metric-item">
+              <div class="metric-info">
+                <span class="metric-name">Predictive Parity</span>
+                <span class="metric-hint">Ideal: &lt; 0.10</span>
+              </div>
+              <div class="metric-bar-wrap">
+                <div class="metric-bar-track">
+                  <div class="metric-bar-fill" id="pp-bar" style="width:0%"></div>
+                </div>
+                <span class="metric-value" id="pp-value">0.19</span>
+              </div>
+              <span class="metric-status" id="pp-status">⚠ Moderate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanation Card -->
+        <div class="result-card explanation-card">
+          <div class="card-header">
+            <span class="card-icon">🧠</span>
+            <h3>AI-Generated Explanation</h3>
+            <span class="ai-badge">AI</span>
+          </div>
+          <div class="explanation-body" id="explanationBody">
+            <p id="explanationText">Loading explanation...</p>
+          </div>
+          <div class="key-findings" id="keyFindings">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+
+        <!-- Affected Groups Card -->
+        <div class="result-card groups-card">
+          <div class="card-header">
+            <span class="card-icon">👥</span>
+            <h3>Affected Groups</h3>
+          </div>
+          <div class="groups-list" id="groupsList">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+
+        <!-- Fix Suggestions Card -->
+        <div class="result-card fixes-card">
+          <div class="card-header">
+            <span class="card-icon">🛠</span>
+            <h3>Suggested Fixes</h3>
+          </div>
+          <div class="fixes-list" id="fixesList">
+            <!-- Dynamically injected -->
+          </div>
+          <button class="btn btn-success btn-full" id="fixBiasBtn" onclick="fixBias()">
+            <span id="fixBtnText">⚡ Apply Bias Fixes</span>
+          </button>
+        </div>
+
+      </div><!-- /results-grid -->
+    </div>
+  </section>
+
+  <!-- ===================== SECTION: COMPARISON ===================== -->
+  <section id="section-comparison" class="section">
+    <div class="page-container">
+<div class="report-header">
+              <button class="back-btn" onclick="navigateTo('results')">← Back to Results</button>
+</div>
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Before vs After Comparison</h2>
+          <p class="page-sub">See the fairness improvements after applying debiasing techniques</p>
+        </div>
+        <span class="badge badge-success">✓ Bias Reduced</span>
+      </div>
+
+      <!-- Improvement Banner -->
+      <div class="improvement-banner" id="improvementBanner">
+        <div class="imp-stat">
+          <span class="imp-label">Bias Score Reduction</span>
+          <span class="imp-value" id="impBiasScore">—</span>
+        </div>
+        <div class="imp-divider"></div>
+        <div class="imp-stat">
+          <span class="imp-label">Overall Improvement</span>
+          <span class="imp-value" id="impOverall">—</span>
+        </div>
+        <div class="imp-divider"></div>
+        <div class="imp-stat">
+          <span class="imp-label">Technique Applied</span>
+          <span class="imp-value" id="impTechnique">Reweighting</span>
+        </div>
+      </div>
+
+      <!-- Comparison Layout -->
+      <div class="comparison-layout">
+
+        <!-- Score Cards Side-by-Side -->
+        <div class="compare-scores">
+          <div class="compare-score-card before">
+            <div class="cs-label">BEFORE</div>
+            <div class="cs-number" id="comp-before-score">72</div>
+            <div class="cs-sub">Bias Score</div>
+            <div class="cs-badge badge-danger">⚠ High Risk</div>
+          </div>
+          <div class="compare-arrow">
+            <div class="arrow-line"></div>
+            <span class="arrow-text" id="impPercent">↓ 75%</span>
+          </div>
+          <div class="compare-score-card after">
+            <div class="cs-label">AFTER</div>
+            <div class="cs-number" id="comp-after-score">18</div>
+            <div class="cs-sub">Bias Score</div>
+            <div class="cs-badge badge-success">✓ Low Risk</div>
+          </div>
+        </div>
+
+        <!-- Metrics Comparison Table -->
+        <div class="comp-table-card">
+          <h3 class="comp-table-title">Detailed Metrics Comparison</h3>
+          <div class="comp-table-wrapper">
+            <table class="comp-table" id="compTable">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Before</th>
+                  <th>After</th>
+                  <th>Improvement</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="compTableBody">
+                <!-- Dynamically injected -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Charts Row: side by side -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3 class="chart-title">Bias Score Comparison</h3>
+            <div class="chart-wrapper">
+              <canvas id="comparisonChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">All Metrics: Before vs After</h3>
+            <div class="chart-wrapper">
+              <canvas id="metricsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Next Step -->
+      <div class="section-cta">
+        <p>Great improvements achieved! Now generate your compliance report.</p>
+        <button class="btn btn-primary btn-lg" onclick="navigateTo('report')">
+          Generate Report →
+        </button>
+        <button class="btn btn-primary" onclick="downloadData()">
+  📥 Download Fixed Dataset
+</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== SECTION: REPORT ===================== -->
+  <section id="section-report" class="section">
+    <div class="page-container">
+      <div class="report-header">
+
+        <button class="back-btn" onclick="navigateTo('comparison')">← Back</button>
+</div>
+      <div class="page-header">
+
+        <div>
+          <h2 class="page-title">Compliance Report</h2>
+          <p class="page-sub">Download your full fairness audit report</p>
+        </div>
+      </div>
+
+      <!-- Report Preview Card -->
+      <div class="report-preview-wrapper">
+        <div class="report-preview-card" id="reportPreview">
+
+          <div class="report-header-strip">
+            <span>🔍 FairLens AI — Fairness Audit Report</span>
+            <span id="reportDate">April 2025</span>
+          </div>
+
+          <div class="report-body">
+            <div class="report-section">
+              <h4>📋 Dataset Summary</h4>
+              <div class="report-meta" id="reportMeta">
+                <div class="report-meta-item"><span>File</span><strong id="rFileName">dataset.csv</strong></div>
+                <div class="report-meta-item"><span>Rows Analyzed</span><strong id="rRows">1,000</strong></div>
+                <div class="report-meta-item"><span>Columns</span><strong id="rCols">8</strong></div>
+                <div class="report-meta-item"><span>Analysis Date</span><strong id="rDate">—</strong></div>
+              </div>
+            </div>
+
+            <div class="report-section">
+              <h4>🎯 Bias Assessment</h4>
+              <div class="report-bias-summary">
+                <div class="rbs-item rbs-before">
+                  <span class="rbs-label">Before Fix</span>
+                  <span class="rbs-score" id="rBeforeScore">72 / 100</span>
+                  <span class="rbs-tag">High Risk</span>
+                </div>
+                <div class="rbs-arrow">→</div>
+                <div class="rbs-item rbs-after">
+                  <span class="rbs-label">After Fix</span>
+                  <span class="rbs-score" id="rAfterScore">18 / 100</span>
+                  <span class="rbs-tag">Low Risk</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-section">
+              <h4>📏 Metrics Summary</h4>
+              <table class="report-table" id="reportMetricsTable">
+                <thead>
+                  <tr><th>Metric</th><th>Before</th><th>After</th><th>Change</th></tr>
+                </thead>
+                <tbody id="reportTableBody"></tbody>
+              </table>
+            </div>
+
+            <div class="report-section">
+              <h4>🧠 AI Explanation</h4>
+              <p class="report-explanation" id="reportExplanation">—</p>
+            </div>
+
+            <div class="report-section">
+              <h4>🛠 Fixes Applied</h4>
+              <ul class="report-fixes" id="reportFixes"></ul>
+            </div>
+
+            <div class="report-section">
+              <h4>✅ Compliance Checklist</h4>
+              <div class="compliance-list">
+                <div class="compliance-item pass"><span>✓</span> GDPR Article 22 — Automated Decision-Making</div>
+                <div class="compliance-item pass"><span>✓</span> EU AI Act — High-Risk System Fairness</div>
+                <div class="compliance-item pass"><span>✓</span> Equal Employment Opportunity Guidelines</div>
+                <div class="compliance-item pass"><span>✓</span> Disparate Impact Doctrine (80% Rule)</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Download Actions -->
+        <div class="download-actions">
+          <button class="btn btn-primary btn-lg" id="downloadPdfBtn" onclick="downloadPDFReport()">
+            ⬇ Download Full PDF Report
+          </button>
+          <button class="btn btn-outline btn-lg" onclick="printReport()">
+            🖨 Print Report
+          </button>
+          <button class="btn btn-ghost btn-lg" onclick="navigateTo('upload')">
+            ↺ Analyze Another Dataset
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== TOAST NOTIFICATION ===================== -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span id="toastMsg">Operation successful!</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
