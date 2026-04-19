@@ -42,20 +42,29 @@ def analyze():
 def fix():
     global df_global
 
-    result = detect_bias(df_global)
+    if df_global is None:
+        return {"error": "No dataset uploaded"}
 
-    col = result["best_column"]
-    target = result["target_column"]
+    try:
+        result = detect_bias(df_global)
 
-    df_fixed = fix_bias_data(df_global.copy(), col, target)
-    fixed_result = detect_bias(df_fixed)
+        col = result["best_column"]
+        target = result["target_column"]
 
-    # ✅ ADD THESE
-    fixed_result["rows"] = len(df_fixed)
-    fixed_result["columns"] = len(df_fixed.columns)
-    fixed_result["file_name"] = "Fixed Dataset"
+        df_fixed = fix_bias_data(df_global.copy(), col, target)
+        fixed_result = detect_bias(df_fixed)
 
-    return fixed_result
+        fixed_result["rows"] = len(df_fixed)
+        fixed_result["columns"] = len(df_fixed.columns)
+        fixed_result["file_name"] = "Fixed Dataset"
+
+        return fixed_result
+
+    except Exception as e:
+        return {"error": str(e)}
+
+
+
 
 app.add_middleware(
     CORSMiddleware,
