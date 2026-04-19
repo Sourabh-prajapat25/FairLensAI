@@ -1,9 +1,12 @@
 from fastapi import FastAPI, File, UploadFile
 import pandas as pd
-from bias import detect_bias
-from fix_bias import fix_bias_data
+
+from backend.bias import detect_bias
+from backend.fix_bias import fix_bias_data
+from backend.gemini import explain_bias
+
 from fastapi.middleware.cors import CORSMiddleware
-from gemini import explain_bias
+
 from fastapi.responses import FileResponse
 
 app = FastAPI()
