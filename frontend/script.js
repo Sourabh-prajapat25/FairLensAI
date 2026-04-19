@@ -22,7 +22,7 @@ const AppState = {
    Replace these with real fetch() calls when backend is ready.
    API_BASE should point to your backend URL.
    ============================================================ */
-const API_BASE = "http://127.0.0.1:8000"; // Change this to your backend URL
+const API_BASE = "https://fairlensai.onrender.com"; // Change this to your backend URL
 
 /**
  * Mock: Simulate POST /analyze
