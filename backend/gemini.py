@@ -1,12 +1,14 @@
 import requests
+import os
 
-API_KEY = "AIzaSyDAyLMQ_1f8JnLa8hje0nIRsilyXh-0vf8"
+API_KEY = os.getenv("GEMINI_API_KEY")
+
 
 def explain_bias(data):
     prompt = f"""
     Explain this bias result in simple language:
 
-    Sensitive column: {data.get('sensitive_column')}
+    Sensitive column: {data.get('best_column')}
     Groups: {data.get('group1')} vs {data.get('group2')}
     Rates: {data.get('group1_rate')} vs {data.get('group2_rate')}
     Bias score: {data.get('bias_score')}
