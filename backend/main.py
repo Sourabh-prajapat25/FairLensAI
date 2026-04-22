@@ -25,7 +25,9 @@ async def upload(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-
+@app.get("/")
+def health():
+    return {"status": "Backend running"}
 
 @app.post("/analyze")
 async def analyze(file: UploadFile = File(...)):
@@ -46,20 +48,17 @@ async def analyze(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-@app.get("/fix")
-def fix():
-    global df_global
-
-    if df_global is None:
-        return {"error": "No dataset uploaded"}
-
+@app.post("/fix")
+async def fix(file: UploadFile = File(...)):
     try:
-        result = detect_bias(df_global)
+        df = pd.read_csv(file.file)
+
+        result = detect_bias(df)
 
         col = result["best_column"]
         target = result["target_column"]
 
-        df_fixed = fix_bias_data(df_global.copy(), col, target)
+        df_fixed = fix_bias_data(df.copy(), col, target)
         fixed_result = detect_bias(df_fixed)
 
         fixed_result["rows"] = len(df_fixed)
@@ -70,7 +69,6 @@ def fix():
 
     except Exception as e:
         return {"error": str(e)}
-
 
 @app.get("/download")
 def download():
