@@ -418,14 +418,19 @@ const formData = new FormData();
 formData.append("file", AppState.uploadedFile);
 
 // Upload file first
-await fetch(`${API_BASE}/upload`, {
+
+
+// Then analyze
+const formData = new FormData();
+formData.append("file", AppState.uploadedFile);
+
+const response = await fetch(`${API_BASE}/analyze`, {
   method: "POST",
   body: formData
 });
 
-// Then analyze
-const response = await fetch(`${API_BASE}/analyze`);
 const raw = await response.json();
+
 
 
 console.log("RAW BACKEND:", raw); 
