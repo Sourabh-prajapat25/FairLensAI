@@ -26,19 +26,17 @@ async def upload(file: UploadFile = File(...)):
         return {"error": str(e)}
 
 
-@app.get("/analyze")
-def analyze():
-    global df_global
 
-    if df_global is None:
-        return {"error": "No dataset uploaded"}
-
+@app.post("/analyze")
+async def analyze(file: UploadFile = File(...)):
     try:
-        result = detect_bias(df_global)
+        df = pd.read_csv(file.file)
 
-        result["rows"] = len(df_global)
-        result["columns"] = len(df_global.columns)
-        result["file_name"] = file_name
+        result = detect_bias(df)
+
+        result["rows"] = len(df)
+        result["columns"] = len(df.columns)
+        result["file_name"] = file.filename
 
         explanation = explain_bias(result)
         result["explanation"] = explanation
@@ -47,7 +45,6 @@ def analyze():
 
     except Exception as e:
         return {"error": str(e)}
-
 
 @app.get("/fix")
 def fix():
