@@ -414,10 +414,7 @@ async function analyzeDataset() {
     // const response = await fetch(`${API_BASE}/analyze`, { method: 'POST', body: formData });
     // const data = await response.json();
 
-const formData = new FormData();
-formData.append("file", AppState.uploadedFile);
 
-// Upload file first
 
 
 // Then analyze
@@ -1282,4 +1279,11 @@ function initApp() {
 }
 
 // Start the app when DOM is ready
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+  initApp();
+
+  // 🔥 Wake up backend (Render sleep fix)
+  fetch(API_BASE)
+    .then(() => console.log("Backend warmed up"))
+    .catch(() => console.log("Backend wake attempt"));
+});
