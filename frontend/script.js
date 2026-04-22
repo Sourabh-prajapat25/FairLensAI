@@ -644,7 +644,16 @@ async function fixBias() {
     // });
     // const data = await response.json();
 
-const res = await fetch(`${API_BASE}/fix`);
+
+
+const formData = new FormData();
+formData.append("file", AppState.uploadedFile);
+
+const res = await fetch(`${API_BASE}/fix`, {
+  method: "POST",
+  body: formData
+});
+
 const raw = await res.json();
 const elapsed = Date.now() - startTime;
 const minTime = 2500;
