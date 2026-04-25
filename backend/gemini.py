@@ -1,14 +1,15 @@
 import requests
 import os
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-
 
 def explain_bias(data):
-    # ✅ Safety check
+    API_KEY = os.getenv("GEMINI_API_KEY")  # ✅ moved inside
+
+    print("API KEY:", API_KEY)
+
     if not API_KEY:
         print("❌ GEMINI_API_KEY not found")
-        return "AI explanation not available (API key missing)."
+        return fallback_explanation(data)
 
     prompt = f"""
 Explain this bias result in simple language:
@@ -29,24 +30,34 @@ Explain in simple, human-friendly terms.
             json={
                 "contents": [{"parts": [{"text": prompt}]}]
             },
-            timeout=10  # ✅ prevent hanging
+            timeout=10
         )
 
-        # ✅ Handle bad responses
         if response.status_code != 200:
             print("Gemini API error:", response.text)
-            return "AI explanation service unavailable."
+            return fallback_explanation(data)
 
         result = response.json()
 
-        # ✅ Safe parsing
         candidates = result.get("candidates")
         if not candidates:
-            print("No candidates in response:", result)
-            return "Could not generate explanation."
+            print("No candidates:", result)
+            return fallback_explanation(data)
 
         return candidates[0]["content"]["parts"][0]["text"]
 
     except Exception as e:
         print("Gemini Exception:", e)
-        return "AI explanation failed."
+        return fallback_explanation(data)
+
+
+# 🔥 fallback (VERY IMPORTANT)
+def fallback_explanation(data):
+    score = data.get("bias_score", 0)
+    g1 = data.get("group1", "Group A")
+    g2 = data.get("group2", "Group B")
+
+    if score > 0.2:
+        return f"High bias detected between {g1} and {g2}. One group is favored significantly."
+    else:
+        return f"Low bias detected between {g1} and {g2}. The system appears relatively fair."
