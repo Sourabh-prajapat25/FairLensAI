@@ -14,7 +14,8 @@ def explain_bias(data):
     prompt = f"""
 Explain this bias result in simple language:
 
-Sensitive column: {data.get('best_column')}
+Sensitive column: {data.get('sensitive_column')}
+
 Groups: {data.get('group1')} vs {data.get('group2')}
 Rates: {data.get('group1_rate')} vs {data.get('group2_rate')}
 Bias score: {data.get('bias_score')}
@@ -22,7 +23,7 @@ Bias score: {data.get('bias_score')}
 Explain in simple, human-friendly terms.
 """
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
 
     try:
         response = requests.post(
